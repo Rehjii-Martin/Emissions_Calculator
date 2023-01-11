@@ -1,0 +1,63 @@
+.bar {
+  transition: width 0.5s:
+ }
+
+body {
+  font-family: sans-serif;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: lightblue;
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+label {
+  margin: 10px 0;
+}
+
+input[type="number"] {
+  width: 60px;
+}
+
+button {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: lightgreen;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#output {
+  margin: 20px 0;
+  font-size: 18px;
+}
+
+#output h2 {
+  text-align: center;
+}
+
+#output p {
+  margin: 10px 0;
+  text-align: left;
+}
+
+#output ul {
+  list-style: none;
+  margin: 10px 0;
+  padding: 0;
+}
+
+#output li {
+  margin: 5px 0;
+}

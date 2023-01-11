@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.onload = function() {
+      // Get references to elements on the page
+      const stoveTypeSelect = document.getElementById('stove-type');
+      const electricStoveOptions = document.getElementById('electric-stove-options');
+      const gasStoveOptions = document.getElementById('gas-stove-options');
+      const calculateButton = document.getElementById('calculate-button');
+      const output = document.getElementById('output');
+
+      // Listen for changes to the value of the stove type select
+     stoveTypeSelect.addEventListener('change', (event) => {
+        if (event.target.value === 'electric') {
+          electricStoveOptions.style.display = 'block';
+          gasStoveOptions.style.display = 'none';
+        } else if (event.target.value === 'gas') {
+          electricStoveOptions.style.display = 'none';
+          gasStoveOptions.style.display = 'block';
+        } else {
+          electricStoveOptions.style.display = 'none';
+          gasStoveOptions.style.display = 'none';
+        }
+      });
+
+      // Listen for clicks on the calculate button
+      calculateButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const milesDriven = document.getElementById('miles-driven').value;
+        const hoursOfLights = document.getElementById('hours-of-lights').value;
+        const lightWattage = document.getElementById('light-wattage').value;
+        const stoveType = document.getElementById('stove-type').value;
+        const stoveTime = document.getElementById('stove-time').value;
+        const burnerEfficiency = document.getElementById('burner-efficiency').value;
+        const burnerSize = document.getElementById('burner-size').value;
+        
+        // Perform calculations based on input values
+        const emissions = {
+        milesDriven: 0.846 * parseFloat(milesDriven), 
+        // Assumes a conversion factor of 0.846 lbs of CO2 per mile
+        hoursOfLights: parseFloat(lightWattage) * parseFloat(hoursOfLights) / 1000 * 0.00029307, 
+        // Assumes a conversion factor of 0.00029307 lbs of CO2 per kWh
+        stove: 0
+        };
+
+	if (stoveType === 'electric') {
+        emissions.stove = 0.00029307 * parseFloat(stoveTime);
+	} else if (stoveType === 'gas') {
+        emissions.stove = (parseFloat(burnerEfficiency) * parseFloat(burnerSize) * parseFloat(stoveTime)) / 1000000 * 0.001163; // Assumes a conversion factor of 0.001163 lbs of CO2 per BTU
+	}
+	const totalEmissions = emissions.milesDriven + emissions.hoursOfLights + emissions.stove;
+	console.log(`Total emissions: ${totalEmissions} lbs of CO2`);
+
+        /// Update the output element with the results
+        output.innerHTML = `Username: ${username}<br>
+	<br>
+        Miles driven per day: ${milesDriven}<br>
+	<br>
+        Hours of lights per day: ${hoursOfLights}<br>
+	<br>
+        Light wattage: ${lightWattage}<br>
+	<br>
+        Stove type: ${stoveType}<br>
+	<br>
+        Stove time per day: ${stoveTime}<br>
+	<br>
+	Total emissions: ${totalEmissions} lbs of CO2`;
+      });
+    };
+  </script>
+</head>
+
+<body>
+
+ <h1>Carbon Emissions Calculator</h1>
+  <form id="carbon-form">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username"><br>
+    <label for="miles-driven">Miles driven per day:</label><br>
+    <input type="number" id="miles-driven"><br>
+    <p>Suggestion: try using public transportation, carpooling, or walking/biking instead of driving alone to reduce emissions.</p>
+    <label for="hours-of-lights">Hours of lights per day:</label><br>
+    <input type="number" id="hours-of-lights"><br>
+    <p>Suggestion: switch to energy-efficient light bulbs or use natural light to reduce emissions.</p>
+    <label for="light-wattage">Light wattage:</label><br>
+    <input type="number" id="light-wattage"><br>
+    <label for="stove-type">Stove type:</label><br>
+    <select id="stove-type">
+      <option value="electric">Electric</option>
+      <option value="gas">Gas</option>
+      <option value="other">Other</option>
+    </select><br>
+    <div id="electric-stove-options" style="display:none">
+      <label for="stove-time">Stove time per day (hours):</label><br>
+      <input type="number" id="stove-time"><br>
+      <p>Suggestion: try using a microwave, toaster oven, or slow cooker instead of the stove to reduce emissions.</p>
+    </div>
+    <div id="gas-stove-options" style="display:none">
+      <label for="stove-time">Stove time per day (hours):</label><br>
+      <input type="number" id="stove-time"><br>
+      <label for="burner-efficiency">Burner efficiency (%):</label><br>
+      <input type="number" id="burner-efficiency"><br>
+      <label for="burner-size">Burner size (BTUs per hour):</label><br>
+      <input type="number" id="burner-size"><br>
+      <p>Suggestion: try using a pressure cooker or a stovetop kettle to reduce emissions.</p>
+    </div>
+    <button type="submit" id="calculate-button">Calculate</button>
+  </form> 
+  <br>
+  <div id="output"></div>
+</body>
+</html>
